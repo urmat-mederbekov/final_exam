@@ -70,7 +70,7 @@
         <li class="page-item disabled">
             <a class="page-link" href="#" tabindex="-1">Элементов на странице</a>
         </li>
-        <#list [5, 10, 25, 50] as c>
+        <#list [5, 10, 20, 40] as c>
             <#if c == pageSize>
                 <li class="page-item active">
                     <a class="page-link" href="#" tabindex="-1">${c}</a>
