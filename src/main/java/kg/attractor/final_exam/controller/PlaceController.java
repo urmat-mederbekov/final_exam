@@ -2,23 +2,25 @@ package kg.attractor.final_exam.controller;
 
 import kg.attractor.final_exam.form.PlaceForm;
 import kg.attractor.final_exam.form.ReviewForm;
-import kg.attractor.final_exam.service.PlaceService;
-import kg.attractor.final_exam.service.PropertiesService;
-import kg.attractor.final_exam.service.ReviewService;
-import kg.attractor.final_exam.service.UserService;
+import kg.attractor.final_exam.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StreamUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.Principal;
 
 @AllArgsConstructor
@@ -30,6 +32,7 @@ public class PlaceController {
     private final UserService userService;
     private final ReviewService reviewService;
     private final PropertiesService propertiesService;
+    private final ImageService imageService;
 
     @GetMapping("/place")
     public String addPlace(Model model, Principal principal){
@@ -56,7 +59,7 @@ public class PlaceController {
                            Pageable pageable, HttpServletRequest uriBuilder){
 
         userService.checkUserPresence(model, principal);
-        model.addAttribute("place", placeService.getPlaceById(Long.parseLong(id)));
+        model.addAttribute("images", imageService.getAllImagesById(Long.parseLong(id)));
         PropertiesService.constructPageable( reviewService.getAllByPlaceId(Long.parseLong(id), pageable),
                 propertiesService.getDefaultPageSize(), model, uriBuilder.getRequestURI());
 
@@ -74,8 +77,42 @@ public class PlaceController {
             attributes.addFlashAttribute("errors", validationResult.getFieldErrors());
             return "redirect:/places/{id}";
         }
-
         reviewService.addReview(reviewForm, principal);
         return "redirect:/places/{id}";
+    }
+
+    @PostMapping("{id}/images")
+    public String addImage(@PathVariable String id,
+                            @RequestParam MultipartFile image){
+
+        imageService.addImage(image, Long.parseLong(id));
+        return "redirect:/places/{id}";
+    }
+
+    @GetMapping("/image/{name}")
+    public ResponseEntity<byte[]> getImage(@PathVariable("name") String name) {
+
+        String path = "../images";
+        MediaType mediaType = name.toLowerCase().contains(".png") ? MediaType.IMAGE_PNG : MediaType.IMAGE_JPEG;
+        try {
+            InputStream is = new FileInputStream(new File(path) + "/" + name);
+            return ResponseEntity
+                    .ok()
+                    .contentType(mediaType)
+                    .body(StreamUtils.copyToByteArray(is));
+        } catch (Exception e) {
+            InputStream is;
+            try {
+                is = new FileInputStream(new File(path) + "/" + name);
+                return ResponseEntity
+                        .ok()
+                        .contentType(mediaType)
+                        .body(StreamUtils.copyToByteArray(is));
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+        return null;
     }
 }
