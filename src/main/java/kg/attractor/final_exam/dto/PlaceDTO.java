@@ -13,7 +13,7 @@ public class PlaceDTO {
     private String title;
     private String description;
     private double rating;
-
+    private int votes;
 
     public static PlaceDTO from(Place place) {
         return builder()
@@ -21,6 +21,7 @@ public class PlaceDTO {
                 .title(place.getTitle())
                 .description(place.getDescription())
                 .rating(place.getRating())
+                .votes(place.getVotes())
                 .build();
     }
 }
