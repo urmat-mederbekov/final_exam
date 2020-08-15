@@ -1,8 +1,9 @@
 <#import "partials/main.ftlh" as main>
 <@main.renderWith>
     <form class="box-1"action="/search">
+        <div>Искать</div>
         <input type="text" name="name">
-        <p><button type="submit" class="btn btn-primary w-100">Добавить</button></p>
+        <p><button type="submit" class="btn btn-primary w-100">Искать</button></p>
     </form>
     <div class="d-flex flex-row">
         <#list items as image>
