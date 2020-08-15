@@ -41,7 +41,7 @@
             </#if>
             <h3 class="text-center">Добавить Отзыв</h3>
             <div class="form-group">
-                <textarea class="form-control" rows="4" cols="50" name="description" placeholder="Описание" required></textarea>
+                <textarea class="form-control" rows="4" cols="50" name="description" placeholder="Описание"></textarea>
                 <#if errors??>
                     <#list errors as fieldError>
                         <#if fieldError.field == 'description'>
@@ -51,7 +51,7 @@
                 </#if>
             </div>
             <div class="form-group">
-                <select class="form-control"  name="rating" required>
+                <select class="form-control"  name="rating">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>

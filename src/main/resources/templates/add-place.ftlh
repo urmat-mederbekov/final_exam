@@ -7,7 +7,7 @@
             </#if>
             <h3 class="text-center">Добавить заведение</h3>
             <div class="form-group">
-                <input class="form-control" type="text" name="title" placeholder="Название" autofocus required>
+                <input class="form-control" type="text" name="title" placeholder="Название" autofocus>
                 <#if errors??>
                     <#list errors as fieldError>
                         <#if fieldError.field == 'title'>
@@ -17,7 +17,7 @@
                 </#if>
             </div>
             <div class="form-group">
-                <input class="form-control" type="text" name="description" placeholder="Описание" required>
+                <input class="form-control" type="text" name="description" placeholder="Описание">
                 <#if errors??>
                     <#list errors as fieldError>
                         <#if fieldError.field == 'description'>
