@@ -37,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true);
 
         http.authorizeRequests()
-                .antMatchers("/places/**", "/reviews/**")
+                .antMatchers("/places/place", "/reviews/**")
                 .authenticated();
 
         http.authorizeRequests()
