@@ -7,16 +7,14 @@ import kg.attractor.final_exam.repo.PlaceRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.config.Task;
 import org.springframework.stereotype.Service;
-
-import java.security.Principal;
 
 @AllArgsConstructor
 @Service
 public class PlaceService {
 
     private final PlaceRepo placeRepo;
+    private final ImageService imageService;
 
     public Page<PlaceDTO> getAll(Pageable pageable){
         return placeRepo.findAll(pageable).map(PlaceDTO::from);
@@ -24,10 +22,12 @@ public class PlaceService {
 
     public void addPlace(PlaceForm placeForm){
 
-        placeRepo.save(Place.builder()
+        Place place = Place.builder()
                 .title(placeForm.getTitle())
                 .description(placeForm.getDescription())
-                .build());
+                .build();
+        placeRepo.save(place);
+        imageService.addImage(placeForm.getImage(), place.getId());
     }
 
     public PlaceDTO getPlaceById(Long id){
@@ -39,7 +39,6 @@ public class PlaceService {
 
         place.setVotes(place.getVotes()+1);
         place.setRating((rating + place.getRating())/place.getVotes());
-
         placeRepo.save(place);
     }
 }

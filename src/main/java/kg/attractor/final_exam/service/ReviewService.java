@@ -31,7 +31,6 @@ public class ReviewService {
     public void addReview(ReviewForm reviewForm, Principal principal){
 
         User user = userRepo.findByEmail(principal.getName());
-
         reviewRepo.save(Review.builder()
                 .description(reviewForm.getDescription())
                 .rating(reviewForm.getRating())
