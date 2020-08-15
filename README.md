@@ -20,3 +20,6 @@ git clone https://github.com/95shuma/crm.git
 ### Папку images переместите из проекта так что он был паралельно папке final_exam
 
 Открыть с помощью IntelliJ IDEA
+
+создайте бд final_exam и
+подключитесь к своему бд
